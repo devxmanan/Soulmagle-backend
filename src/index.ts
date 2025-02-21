@@ -8,7 +8,7 @@ const server = http.createServer(http);
 
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "https://soulmagle.vercel.app",
     methods: ["GET", "POST"]
   }
 });
