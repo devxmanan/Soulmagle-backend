@@ -23,7 +23,7 @@ io.on('connection', (socket: Socket) => {
     userManager.removeUser(socket.id);
   })
 });
-
-server.listen(3000, "0.0.0.0", () => {
+const PORT = Number(process.env.port) || 3000
+server.listen(PORT, "0.0.0.0", () => {
     console.log('listening on *:3000');
 });
