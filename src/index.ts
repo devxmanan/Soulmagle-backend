@@ -16,19 +16,29 @@ const io = new Server(server, {
 
 const userManager = new UserManager();
 
-io.on('connection', (socket: Socket) => {
+var user: any;
+
+io.use((socket, next) => {
   const userId = socket.handshake.query.userId as string;
   const db = admin.firestore();
   const userDocRef = db.collection('users').doc(userId);
-  let user: any;
   userDocRef.get()
     .then((doc) => {
       if (doc.exists) {
-       user = doc.data();
+        user = doc.data();
       } else {
         console.log('No such document!');
       }
+      next();
     })
+    .catch((error) => {
+      console.error('Authentication error:', error);
+      next(new Error('Authentication error'));
+    });
+});
+
+io.on('connection', (socket: Socket) => {
+
   console.log('a user connected', user?.name);
   userManager.addUser("randomName", socket);
   socket.on("disconnect", () => {
