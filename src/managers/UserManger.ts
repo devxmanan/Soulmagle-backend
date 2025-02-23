@@ -10,7 +10,7 @@ export class UserManager {
     private users: User[];
     private queue: string[];
     private roomManager: RoomManager;
-    
+
     constructor() {
         this.users = [];
         this.queue = [];
@@ -29,7 +29,7 @@ export class UserManager {
 
     removeUser(socketId: string) {
         const user = this.users.find(x => x.socket.id === socketId);
-        
+
         this.users = this.users.filter(x => x.socket.id !== socketId);
         this.queue = this.queue.filter(x => x === socketId);
     }
@@ -50,23 +50,28 @@ export class UserManager {
         if (!user1 || !user2) {
             return;
         }
-        console.log("creating roonm");
+        console.log("creating room");
 
         const room = this.roomManager.createRoom(user1, user2);
         this.clearQueue();
     }
 
     initHandlers(socket: Socket) {
-        socket.on("offer", ({sdp, roomId}: {sdp: string, roomId: string}) => {
+        socket.on("offer", ({ sdp, roomId }: { sdp: string, roomId: string }) => {
             this.roomManager.onOffer(roomId, sdp, socket.id);
         })
 
-        socket.on("answer",({sdp, roomId}: {sdp: string, roomId: string}) => {
+        socket.on("answer", ({ sdp, roomId }: { sdp: string, roomId: string }) => {
             this.roomManager.onAnswer(roomId, sdp, socket.id);
         })
 
-        socket.on("add-ice-candidate", ({candidate, roomId, type}) => {
+        socket.on("add-ice-candidate", ({ candidate, roomId, type }) => {
             this.roomManager.onIceCandidates(roomId, socket.id, candidate, type);
+        });
+        socket.on("disconnect", () => {
+            this.removeUser(socket.id);
+            this.roomManager.disconnectUser(socket.id);
+            this.clearQueue();
         });
     }
 
