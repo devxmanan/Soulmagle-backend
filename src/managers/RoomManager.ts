@@ -71,19 +71,4 @@ export class RoomManager {
   generate() {
     return GLOBAL_ROOM_ID++;
   }
-
-  disconnectUser(socketId: string) {
-    for (const [roomId, room] of this.rooms) {
-      if (room.user1.socket.id === socketId) {
-        room.user2.socket.emit("disconnect");
-        this.removeRoom(roomId);
-        return;
-      }
-      if (room.user2.socket.id === socketId) {
-        room.user1.socket.emit("disconnect");
-        this.removeRoom(roomId);
-        return;
-      }
-    }
-  }
 }
