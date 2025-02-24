@@ -24,7 +24,8 @@ export async function findSimilarUsers(userID, remainingUsers) {
     } catch {
         console.log("Error finding similar users");
     }
-
-    const sortedSimilarities = similarities.sort((a, b) => a.similarity - b.similarity);
-    return sortedSimilarities[0];
+    if (similarities.length > 0) {
+        similarities.sort((a, b) => a.similarity - b.similarity);
+    }
+    return similarities[0];
 }
