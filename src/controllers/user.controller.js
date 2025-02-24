@@ -29,15 +29,15 @@ const socialAuth = asyncHandler(async (req, res) => {
 
     const accessTokenOptions = {
         httpOnly: true,
-        // secure: true, // Set to true in production for HTTPS
+        secure: true, // Set to true in production for HTTPS
         maxAge: 3 * 24 * 60 * 60 * 1000, // 3 days in milliseconds
-        // sameSite: "none",
+        sameSite: "none",
     };
     const refreshTokenOptions = {
         httpOnly: true,
-        // secure: true, // Set to true in production for HTTPS
+        secure: true, // Set to true in production for HTTPS
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
-        // sameSite: "none",
+        sameSite: "none",
     };
 
     if (!user) {
