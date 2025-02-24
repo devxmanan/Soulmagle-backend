@@ -9,16 +9,21 @@ function cosineSimilarity(vectorA, vectorB) {
 }
 
 export async function findSimilarUsers(userID, remainingUsers) {
-    const user1 = await User.findById(userID.userId);
-    var similarities = []
-    for (const user of remainingUsers) {
-        const u = await User.findById(user.userId);
-        const similarity = {
-            userId: u._id,
-            similarity: cosineSimilarity(user1.interests, u.interests)
+    try {
+
+        const user1 = await User.findById(userID.userId);
+        var similarities = []
+        for (const user of remainingUsers) {
+            const u = await User.findById(user.userId);
+            const similarity = {
+                userId: u._id,
+                similarity: cosineSimilarity(user1.interests, u.interests)
+            };
+            similarities.push(similarity);
         };
-        similarities.push(similarity);
-    };
+    } catch {
+        console.log("Error finding similar users");
+    }
 
     const sortedSimilarities = similarities.sort((a, b) => a.similarity - b.similarity);
     return sortedSimilarities[0];

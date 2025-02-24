@@ -97,7 +97,7 @@ const userManager = new UserManager();
 setInterval(() => {
     console.log("users: ", userManager.users.length);
     console.log("queue: ", userManager.queue.length);
-}, 4000)
+}, 8000)
 
 io.on("connection", async (socket) => {
     const userId = socket.handshake.query.userId;
